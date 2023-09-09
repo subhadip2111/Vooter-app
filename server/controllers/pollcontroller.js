@@ -1,5 +1,4 @@
 const pollMOdel = require("../models/pollesmodel");
-
 const userMOdel = require("../models/userModels");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
@@ -33,6 +32,8 @@ exports.createPoll = async function (req, res, next) {
 exports.getPoll = async function (req, res, next) {
   try {
     const polls = await pollMOdel.find().populate("user", ["username", "id"]);
+  if(!polls) return res.status(404).send({messaage:"not found any pool"})
+   return res.status(200).json(polls);
   } catch (error) {
     error.status = 400;
     next(error);
@@ -44,12 +45,20 @@ exports.usersPolls = async function (req, res, next) {
     const { id } = req.decoded;
     const user = await userMOdel.findById(id).populate("polls");
 
+    if (!user) {
+      // Handle the case where the user with the specified ID was not found
+      const error = new Error("User not found");
+      error.status = 404; // Not Found status code
+      throw error;
+    }
+
     return res.status(200).json(user.polls);
   } catch (error) {
-    error.status = 400;
+    // Handle errors here
     next(error);
   }
 };
+
 
 exports.getPollById = async function (req, res, next) {
   try {

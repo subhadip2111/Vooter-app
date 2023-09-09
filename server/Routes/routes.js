@@ -5,9 +5,11 @@ const auth=require("../middlewares/auth")
 const pollController=require("../controllers/pollcontroller")
 router.post("/register", userController.register);
 router.post("/login", userController.login);
-router.post("/createpoll",auth, pollController.createPoll);
-router.get("/getpoll", pollController.getPoll);
-//get userpoll
+router.post("/createpoll", auth, pollController.createPoll);
+
+//show the All poll 
+router.get("/", pollController.getPoll);
+//get usersAllpoll
 router.get("/user", auth, pollController.usersPolls);
  router.get("/:id", pollController.getPollById);
  router.post("/:id", auth, pollController.giveVote);
