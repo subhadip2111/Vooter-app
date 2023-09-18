@@ -7,9 +7,12 @@ exports.register = async (req, res, next) => {
     const { id, username } = user;
 
       
-      
+      const expirationTime = 30 * 60;
     
-      const token = jwt.sign({ id, username }, process.env.SECRET_KEY);
+      const token = jwt.sign(
+        { id, username, exp: Math.floor(Date.now() / 1000) + expirationTime },
+        process.env.SECRET_KEY
+      );
     
      //console.log("process.env.SECRET_KEY", process.env.SECRET_KEY);
       
@@ -32,7 +35,18 @@ exports.login = async (req, res, next) => {
 
       if (validPassword) {
         
-           const token = jwt.sign({ id, username }, process.env.SECRET_KEY);
+
+         const expirationTime = 30 * 60;
+
+         const token = jwt.sign(
+           {
+             id,
+             username,
+             exp: Math.floor(Date.now() / 1000) + expirationTime,
+           },
+           process.env.SECRET_KEY
+         );
+          //const token = jwt.sign({ id, username }, process.env.SECRET_KEY);
       
           res.status(200).json({ id, username, token });
     } else {

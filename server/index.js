@@ -8,7 +8,13 @@ const app = express();
 const routes = require("./Routes/routes");
 require("dotenv").config();
 
-app.use(cors())
+const corsOptions = {
+  origin: "http://localhost:3000", // Replace with your frontend URL
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true, // Enable cookies, if applicable
+};
+
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
 

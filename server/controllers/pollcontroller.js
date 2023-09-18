@@ -19,9 +19,16 @@ exports.createPoll = async function (req, res, next) {
         votes: 0,
       })),
     });
-
-    user.polls.push(poll._id);
-    await user.save();
+console.log("user",user)
+   if (user && user.polls) {
+     // Access user.poll and push the poll ID
+     user.polls.push(poll._id);
+     await user.save();
+   } else {
+     // Handle the case where user or user.poll is undefined
+     console.error("User or user.poll is undefined.");
+     // You might want to return an error response here
+   }
     return res.status(201).json({ ...poll._doc, user: user._id });
   } catch (error) {
     error.status = 400;
@@ -47,12 +54,11 @@ exports.usersPolls = async function (req, res, next) {
 
     if (!user) {
       // Handle the case where the user with the specified ID was not found
-      const error = new Error("User not found");
-      error.status = 404; // Not Found status code
-      throw error;
+     return res.status(404).json({messaage:"User not Found"})
     }
 
     return res.status(200).json(user.polls);
+
   } catch (error) {
     // Handle errors here
     next(error);
