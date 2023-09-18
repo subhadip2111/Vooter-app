@@ -2,7 +2,7 @@ const pollMOdel = require("../models/pollesmodel");
 const userMOdel = require("../models/userModels");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
-const { error } = require("console");
+
 
 exports.createPoll = async function (req, res, next) {
   try {
@@ -19,7 +19,7 @@ exports.createPoll = async function (req, res, next) {
         votes: 0,
       })),
     });
-console.log("user",user)
+//console.log("user",user)
    if (user && user.polls) {
      // Access user.poll and push the poll ID
      user.polls.push(poll._id);
